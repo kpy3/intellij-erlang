@@ -26,6 +26,8 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.intellij.erlang.bif.ErlangBifTable;
 import org.intellij.erlang.psi.*;
+import org.intellij.erlang.sdk.ErlangSdkRelease;
+import org.intellij.erlang.sdk.ErlangSdkType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -72,7 +74,8 @@ public final class ElementDocProviderFactory {
         ErlangFunctionCallExpression erlFunctionCall = erlGlobalFunctionCall.getFunctionCallExpression();
         String functionName = erlFunctionCall.getName();
         int arity = erlFunctionCall.getArgumentList().getExpressionList().size();
-        if (ErlangBifTable.isBif(moduleName, functionName, arity)) {
+        ErlangSdkRelease release = ErlangSdkType.getRelease(project);
+        if (ErlangBifTable.isBif(release, moduleName, functionName, arity)) {
           PsiElement tentativeErlangModule = moduleRef.getReference().resolve();
           if (tentativeErlangModule instanceof ErlangModule) {
             VirtualFile virtualFile = getVirtualFile(tentativeErlangModule);

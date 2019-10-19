@@ -63,8 +63,12 @@ public class ErlangFunctionReferenceImpl extends ErlangPsiPolyVariantCachingRefe
     if (myModuleAtom != null) {
       String moduleName = ErlangPsiImplUtil.getName(myModuleAtom);
       ErlangFunction explicitFunction = getExternalFunction(moduleName);
+      ErlangSdkRelease release = null;
+      if (explicitFunction != null) {
+        release = ErlangSdkType.getRelease(explicitFunction);
+      }
       boolean resolveToCallSite = explicitFunction == null && (
-        ErlangBifTable.isBif(moduleName, myReferenceName, myArity) ||
+        ErlangBifTable.isBif(release, moduleName, myReferenceName, myArity) ||
         ErlangOperatorTable.canBeInvokedAsFunction(moduleName, myReferenceName, myArity) ||
         myReferenceName.equals(ErlangBifTable.MODULE_INFO) && (myArity == 1 || myArity == 0)
       );
@@ -97,8 +101,8 @@ public class ErlangFunctionReferenceImpl extends ErlangPsiPolyVariantCachingRefe
 
       ErlangSdkRelease release = ErlangSdkType.getRelease(file);
       if ((release == null || release.needBifCompletion("erlang")) &&
-          ErlangBifTable.isBif("erlang", myReferenceName, myArity) ||
-          ErlangBifTable.isBif("", myReferenceName, myArity)) return getElement();
+          ErlangBifTable.isBif(release, "erlang", myReferenceName, myArity) ||
+          ErlangBifTable.isBif(release, "", myReferenceName, myArity)) return getElement();
     }
 
     return null;

@@ -541,9 +541,9 @@ public class ErlangPsiImplUtil {
         functions.addAll(getExternalFunctionForCompletion(containingFile.getProject(), moduleName));
 
         if (release == null || release.needBifCompletion(moduleName)) {
-          addBifs(lookupElements, ErlangBifTable.getBifs(moduleName), withArity);
+          addBifs(lookupElements, ErlangBifTable.getBifs(release, moduleName), withArity);
         }
-        addBifs(lookupElements, ErlangBifTable.getBifs("", ErlangBifTable.MODULE_INFO), withArity);
+        addBifs(lookupElements, ErlangBifTable.getBifs(release, "", ErlangBifTable.MODULE_INFO), withArity);
       }
       else {
         ErlangFile erlangFile = (ErlangFile) containingFile;
@@ -558,10 +558,10 @@ public class ErlangPsiImplUtil {
         }
 
         if (!withArity && (release == null || release.needBifCompletion("erlang"))) {
-          addBifs(lookupElements, ErlangBifTable.getBifs("erlang"));
+          addBifs(lookupElements, ErlangBifTable.getBifs(release, "erlang"));
         }
         if (!withArity && (release == null || release.needBifCompletion(""))) {
-          addBifs(lookupElements, ErlangBifTable.getBifs(""));
+          addBifs(lookupElements, ErlangBifTable.getBifs(release, ""));
         }
       }
 

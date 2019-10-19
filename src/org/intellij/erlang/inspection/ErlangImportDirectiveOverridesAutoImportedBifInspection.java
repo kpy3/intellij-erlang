@@ -39,8 +39,9 @@ public class ErlangImportDirectiveOverridesAutoImportedBifInspection extends Erl
     for (ErlangImportFunction importFunction : file.getImportedFunctions()) {
       String name = ErlangPsiImplUtil.getName(importFunction);
       int arity = ErlangPsiImplUtil.getArity(importFunction);
+      ErlangSdkRelease release = ErlangSdkType.getRelease(file);
 
-      ErlangBifDescriptor bifDescriptor = ErlangBifTable.getBif("erlang", name, arity);
+      ErlangBifDescriptor bifDescriptor = ErlangBifTable.getBif(release, "erlang", name, arity);
       if (bifDescriptor == null || !bifDescriptor.isAutoImported() || file.isNoAutoImport(name, arity)) continue;
 
       String errorMessage = "Import directive overrides pre R14 auto-imported BIF '" +

@@ -25,10 +25,17 @@ public class ErlangSdkReleaseTest extends TestCase {
   public void testNeedCompletion4() { assertTrue(ErlangSdkRelease.V_R15B02.needBifCompletion("lager")); }
   public void testNeedCompletion5() { assertTrue(ErlangSdkRelease.V_R16A.needBifCompletion("lager")); }
   public void testNeedCompletion6() { assertTrue(ErlangSdkRelease.V_R16B.needBifCompletion("lager")); }
+  public void testNeedCompletion7() { assertTrue(ErlangSdkRelease.V_19_0.needBifCompletion("lager")); }
+  public void testNeedCompletion8() { assertTrue(ErlangSdkRelease.V_20_0.needBifCompletion("lager")); }
+  public void testNeedCompletion9() { assertTrue(ErlangSdkRelease.V_21_0.needBifCompletion("lager")); }
 
   public void testIsNewerThan() {
     assertTrue(ErlangSdkRelease.V_17_0.isNewerThan(ErlangSdkRelease.V_R16A));
     assertFalse(ErlangSdkRelease.V_R16A.isNewerThan(ErlangSdkRelease.V_17_0));
     assertFalse(ErlangSdkRelease.V_17_0.isNewerThan(ErlangSdkRelease.V_17_0));
+    assertTrue(ErlangSdkRelease.V_19_0.isNewerThan(ErlangSdkRelease.V_17_0));
+    assertTrue(ErlangSdkRelease.V_21_0.isNewerThan(ErlangSdkRelease.V_20_0));
+    assertTrue(ErlangSdkRelease.V_22_0.isNewerThan(ErlangSdkRelease.V_21_0));
+    assertFalse(ErlangSdkRelease.V_19_0.isNewerThan(ErlangSdkRelease.V_22_0));
   }
 }

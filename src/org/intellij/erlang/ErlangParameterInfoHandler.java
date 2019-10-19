@@ -29,6 +29,8 @@ import com.intellij.util.containers.ContainerUtil;
 import org.intellij.erlang.bif.ErlangBifDescriptor;
 import org.intellij.erlang.bif.ErlangBifTable;
 import org.intellij.erlang.psi.*;
+import org.intellij.erlang.sdk.ErlangSdkRelease;
+import org.intellij.erlang.sdk.ErlangSdkType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -100,13 +102,15 @@ public class ErlangParameterInfoHandler implements ParameterInfoHandler<ErlangAr
           ErlangModuleRef moduleRef = erlGlobalFunctionCall.getModuleRef();
           String moduleName = moduleRef.getText();
           String functionName = erlFunctionCall.getName();
-          List<ErlangBifDescriptor> moduleInfo = functionName.equals(ErlangBifTable.MODULE_INFO) ? ErlangBifTable.getBifs("", functionName) : Collections.emptyList();
-          context.setItemsToShow(ArrayUtil.toObjectArray(ContainerUtil.concat(ErlangBifTable.getBifs(moduleName, functionName), moduleInfo)));
+          ErlangSdkRelease release = ErlangSdkType.getRelease(erlGlobalFunctionCall);
+          List<ErlangBifDescriptor> moduleInfo = functionName.equals(ErlangBifTable.MODULE_INFO) ? ErlangBifTable.getBifs(release, "", functionName) : Collections.emptyList();
+          context.setItemsToShow(ArrayUtil.toObjectArray(ContainerUtil.concat(ErlangBifTable.getBifs(release, moduleName, functionName), moduleInfo)));
           context.showHint(args, args.getTextRange().getStartOffset(), this);
         }
         else {
           String name = erlFunctionCall.getName();
-          context.setItemsToShow(ArrayUtil.toObjectArray(ContainerUtil.concat(ErlangBifTable.getBifs("erlang", name), ErlangBifTable.getBifs("", name))));
+          ErlangSdkRelease release = ErlangSdkType.getRelease(erlFunctionCall);
+          context.setItemsToShow(ArrayUtil.toObjectArray(ContainerUtil.concat(ErlangBifTable.getBifs(release,"erlang", name), ErlangBifTable.getBifs(release, "", name))));
           context.showHint(args, args.getTextRange().getStartOffset(), this);
         }
       }

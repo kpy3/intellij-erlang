@@ -48,11 +48,13 @@ public class ErlangAmbiguousCallOfAutoImportedFunctionInspection extends ErlangI
         if (o.getQAtom().getMacros() != null) return;
         String name = o.getName();
         int arity = o.getArgumentList().getExpressionList().size();
-        ErlangBifDescriptor bifDescriptor = ErlangBifTable.getBif("erlang", name, arity);
+        ErlangFile containingFile = (ErlangFile) o.getContainingFile();
+        ErlangSdkRelease release = ErlangSdkType.getRelease(containingFile);
+        ErlangBifDescriptor bifDescriptor = ErlangBifTable.getBif(release, "erlang", name, arity);
         if (bifDescriptor == null
           || !bifDescriptor.isAutoImported()
-          || ((ErlangFile) o.getContainingFile()).isNoAutoImport(name, arity)
-          || ((ErlangFile) o.getContainingFile()).getFunction(name, arity) == null) {
+          || containingFile.isNoAutoImport(name, arity)
+          || containingFile.getFunction(name, arity) == null) {
           return;
         }
         holder.registerProblem(o.getNameIdentifier(),

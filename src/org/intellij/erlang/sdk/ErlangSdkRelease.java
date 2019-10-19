@@ -30,6 +30,11 @@ public final class ErlangSdkRelease {
   public static final ErlangSdkRelease V_R16B = new ErlangSdkRelease("R16B", "5.10.1");
   public static final ErlangSdkRelease V_17_0 = new ErlangSdkRelease("17", "6.0");
   public static final ErlangSdkRelease V_18_0 = new ErlangSdkRelease("18", "7.0");
+  public static final ErlangSdkRelease V_19_0 = new ErlangSdkRelease("19", "8.0");
+  public static final ErlangSdkRelease V_20_0 = new ErlangSdkRelease("20", "9.0");
+  public static final ErlangSdkRelease V_21_0 = new ErlangSdkRelease("21", "10.0");
+  public static final ErlangSdkRelease V_22_0 = new ErlangSdkRelease("22", "10.4");
+  public static final ErlangSdkRelease V_22_1 = new ErlangSdkRelease("22", "10.5");
 
   private static final Pattern VERSION_PATTERN = Pattern.compile("Erlang/OTP (\\S+) \\[erts-(\\S+)]");
 
