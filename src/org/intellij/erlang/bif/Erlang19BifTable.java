@@ -51,8 +51,6 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get_keys", 1, "Val", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erts_internal", "group_leader", 2, "GroupLeader, Pid"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erts_internal", "group_leader", 3, "GroupLeader, Pid, Reference"));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "halt", 0, "", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "halt", 1, "Status", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "halt", 2, "Status, Options", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "phash", 2, "Term, Range"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "phash2", 1, "Term, Range"));
@@ -74,8 +72,8 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "localtime", 0, ""));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "localtime_to_universaltime", 2, "Localtime, IsDst"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "make_ref", 0, "", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "unique_integer", 0, "", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "unique_integer", 1, "ModifierList", true));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "unique_integer", 0, ""));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "unique_integer", 1, "ModifierList"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "md5", 1, "Data"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "md5_init", 0, ""));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "md5_update", 2, "Context, Data"));
@@ -88,13 +86,13 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "node", 0, "", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "nodes", 1, "Arg", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "now", 0, "", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "monotonic_time", 0, "", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "monotonic_time", 1, "Unit", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "system_time", 0, "", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "system_time", 1, "Unit", true));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "monotonic_time", 0, ""));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "monotonic_time", 1, "Unit"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "system_time", 0, ""));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "system_time", 1, "Unit"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "time_offset", 0, "", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "time_offset", 1, "Unit", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "timestamp", 0, "", true));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "timestamp", 0, ""));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erts_internal", "open_port", 2, "PortName, PortSettings", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "pid_to_list", 1, "Pid", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "ports", 0, ""));
@@ -144,11 +142,19 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "port_control", 3, "Port, Operation, Data", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "port_close", 1, "Port", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "port_connect", 2, "Port, Pid", true));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "request_system_task", 3, "Pid, Prio, Request"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "check_process_code", 2, "Module, Flags", true));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "map_to_tuple_keys", 1, "M"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "term_type", 1, "T"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "map_hashmap_children", 1, "M", true));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "time_unit", 0, ""));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "perf_counter_unit", 0, ""));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "is_system_process", 1, "Pid"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "system_check", 1, "Type"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "port_set_data", 2, "P1, P2"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "port_get_data", 1, "P1"));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "trace_pattern", 2, "MFA, MatchSpec"));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "trace_pattern", 3, "MFA, MatchSpec, FlagList"));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "trace", 3, "PidSpec, How, FlagList"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "trace_pattern", 3, "MFA, MatchSpec, FlagList"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "trace", 3, "PidSpec, How, FlagList"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "trace_info", 2, "PidOrFunc, Item"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "trace_delivered", 1, "Tracee"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "seq_trace", 2, "P1, P2"));
@@ -175,14 +181,19 @@ public class Erlang19BifTable {
     bifMap.putValue("math", new ErlangBifDescriptor("math", "erfc", 1, "X"));
     bifMap.putValue("math", new ErlangBifDescriptor("math", "exp", 1, "X"));
     bifMap.putValue("math", new ErlangBifDescriptor("math", "log", 1, "X"));
+    bifMap.putValue("math", new ErlangBifDescriptor("math", "log2", 1, "X"));
     bifMap.putValue("math", new ErlangBifDescriptor("math", "log10", 1, "X"));
     bifMap.putValue("math", new ErlangBifDescriptor("math", "sqrt", 1, "X"));
     bifMap.putValue("math", new ErlangBifDescriptor("math", "atan2", 2, "X"));
     bifMap.putValue("math", new ErlangBifDescriptor("math", "pow", 2, "X"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "start_timer", 3, "Time, Dest, Msg"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "start_timer", 4, "Time, Dest, Msg, Options"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "send_after", 3, "Time, Dest, Msg"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "send_after", 4, "Time, Dest, Msg, Options"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "cancel_timer", 1, "TimerRef"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "cancel_timer", 2, "TimerRef, Options"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "read_timer", 1, "TimerRef"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "read_timer", 2, "TimerRef, Options"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "make_tuple", 2, "Arity, InitialValue"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "append_element", 2, "Tuple1, Term"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "make_tuple", 3, "Arity, DefaultValue, InitList"));
@@ -267,6 +278,9 @@ public class Erlang19BifTable {
     bifMap.putValue("os", new ErlangBifDescriptor("os", "getenv", 1, "VarName"));
     bifMap.putValue("os", new ErlangBifDescriptor("os", "getpid", 0, ""));
     bifMap.putValue("os", new ErlangBifDescriptor("os", "timestamp", 0, ""));
+    bifMap.putValue("os", new ErlangBifDescriptor("os", "system_time", 0, ""));
+    bifMap.putValue("os", new ErlangBifDescriptor("os", "system_time", 1, "Unit"));
+    bifMap.putValue("os", new ErlangBifDescriptor("os", "perf_counter", 1, "Unit"));
     bifMap.putValue("erl_ddll", new ErlangBifDescriptor("erl_ddll", "try_load", 3, "Path, Name, OptionList"));
     bifMap.putValue("erl_ddll", new ErlangBifDescriptor("erl_ddll", "try_unload", 2, "Name, OptionList"));
     bifMap.putValue("erl_ddll", new ErlangBifDescriptor("erl_ddll", "loaded_drivers", 0, ""));
@@ -396,6 +410,12 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "float_to_binary", 2, "Float, Options", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "binary_to_float", 1, "Binary", true));
     bifMap.putValue("io", new ErlangBifDescriptor("io", "printable_range", 0, ""));
+    bifMap.putValue("os", new ErlangBifDescriptor("os", "unsetenv", 1, "VarName"));
+    // Since 17.0
+
+    // Since 18.0
+
+    // Obsolete
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "hash", 2, "Term, Range"));
 
     putLagerFunctionsToBifMap();
