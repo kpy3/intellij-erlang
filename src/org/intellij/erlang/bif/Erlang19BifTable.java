@@ -45,7 +45,7 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "float_to_list", 1, "Float", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "float_to_list", 2, "Float, Options", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "fun_info", 2, "Fun, Item"));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "erts_internal", 1, "Pid"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "garbage_collect", 1, "Pid"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get", 0, "", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get", 1, "Key", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get_keys", 1, "Val", true));
@@ -235,7 +235,7 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "is_record", 2, "Term, RecordTag", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "is_record", 3, "Term, RecordTag, Size", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "match_spec_test", 3, "P1, P2, P3"));
-    bifMap.putValue("ets", new ErlangBifDescriptor("ets", "all", 0, ""));
+    bifMap.putValue("ets", new ErlangBifDescriptor("ets", "internal_request_all", 0, ""));
     bifMap.putValue("ets", new ErlangBifDescriptor("ets", "new", 2, "Name, Options"));
     bifMap.putValue("ets", new ErlangBifDescriptor("ets", "delete", 1, "Tab"));
     bifMap.putValue("ets", new ErlangBifDescriptor("ets", "delete", 2, "Tab, Key"));
