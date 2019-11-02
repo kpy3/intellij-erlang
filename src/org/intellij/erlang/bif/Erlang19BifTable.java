@@ -412,9 +412,36 @@ public class Erlang19BifTable {
     bifMap.putValue("io", new ErlangBifDescriptor("io", "printable_range", 0, ""));
     bifMap.putValue("os", new ErlangBifDescriptor("os", "unsetenv", 1, "VarName"));
     // Since 17.0
-
+    bifMap.putValue("re", new ErlangBifDescriptor("re", "inspect", 2, "MP, Item"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "is_map", 1, "Term", true));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "map_size", 1, "Map", true));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "to_list", 1, "Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "find", 2, "Key, Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "get", 2, "Key, Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "from_list", 1, "List"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "is_key", 2, "Key, Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "keys", 1, "Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "merge", 1, "Map1, Map2"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "new", 0, ""));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "put", 3, "Key, Value, Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "remove", 2, "Key, Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "update", 3, "Key, Value, Map"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "values", 1, "Map"));
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "cmp_term", 2, "Term1, Term2"));
+    bifMap.putValue("ets", new ErlangBifDescriptor("ets", "take", 2, "Tab, Key"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "fun_info_mfa", 1, "Fun"));
     // Since 18.0
-
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get_keys", 0, ""));
+    bifMap.putValue("ets", new ErlangBifDescriptor("ets", "update_counter", 4, "Tab, Key, UpdateOp, Default"));
+    bifMap.putValue("erts_debug", new ErlangBifDescriptor("erts_debug", "map_info", 1, "Map"));
+    // Since 19.0
+    bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "purge_module", 2, "Module, Op"));
+    bifMap.putValue("binary", new ErlangBifDescriptor("binary", "split", 2, "Subject, Pattern"));
+    bifMap.putValue("binary", new ErlangBifDescriptor("binary", "split", 3, "Subject, Pattern, Options"));
+    bifMap.putValue("erts_debug", new ErlangBifDescriptor("erts_debug", "size_shared", 1, "Term"));
+    bifMap.putValue("erts_debug", new ErlangBifDescriptor("erts_debug", "copy_shared", 1, "Term"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "has_prepared_code_on_load", 1, "PreparedCode"));
+    bifMap.putValue("maps", new ErlangBifDescriptor("maps", "take", 1, "Key, Map"));
     // Obsolete
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "hash", 2, "Term, Range"));
 
