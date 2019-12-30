@@ -64,8 +64,8 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get", 0, "", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get", 1, "Key", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "get_keys", 1, "Val", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erts_internal", "group_leader", 2, "GroupLeader, Pid"));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erts_internal", "group_leader", 3, "GroupLeader, Pid, Reference"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "group_leader", 2, "GroupLeader, Pid"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "group_leader", 3, "GroupLeader, Pid, Reference"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "halt", 2, "Status, Options", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "phash", 2, "Term, Range"));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "phash2", 1, "Term, Range"));
@@ -113,7 +113,7 @@ public class Erlang19BifTable {
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "ports", 0, ""));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "pre_loaded", 0, "", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "process_flag", 2, "Flag :: trap_exit, Boolean", true));
-    bifMap.putValue("erlang", new ErlangBifDescriptor("erts_internal", "process_flag", 3, "Pid, Flag, Value", true));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "process_flag", 3, "Pid, Flag, Value", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "process_info", 1, "Pid", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "process_info", 2, "Pid, ItemList", true));
     bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "processes", 0, "", true));

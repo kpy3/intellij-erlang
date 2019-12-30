@@ -45,13 +45,14 @@ public class Erlang20BifTable {
     bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "is_process_executing_dirty", 1, "Pid"));
     bifMap.putValue("erts_internal", new ErlangBifDescriptor("erts_internal", "check_dirty_process_code", 2, "Pid, Module"));
     bifMap.remove("erlang", new ErlangBifDescriptor("erlang", "hash", 2, "Term, Range"));
-    bifMap.remove("erlang", new ErlangBifDescriptor("erlang", "floor", 1, "Number"));
-    bifMap.remove("erlang", new ErlangBifDescriptor("erlang", "ceil", 1, "Number"));
-    bifMap.remove("math", new ErlangBifDescriptor("math", "floor", 1, "Number"));
-    bifMap.remove("math", new ErlangBifDescriptor("math", "ceil", 1, "Number"));
-    bifMap.remove("math", new ErlangBifDescriptor("math", "fmod", 2, "X, Y"));
-    bifMap.remove("os", new ErlangBifDescriptor("os", "set_signal", 2, "Signal, Option"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "floor", 1, "Number"));
+    bifMap.putValue("erlang", new ErlangBifDescriptor("erlang", "ceil", 1, "Number"));
+    bifMap.putValue("math", new ErlangBifDescriptor("math", "floor", 1, "Number"));
+    bifMap.putValue("math", new ErlangBifDescriptor("math", "ceil", 1, "Number"));
+    bifMap.putValue("math", new ErlangBifDescriptor("math", "fmod", 2, "X, Y"));
+    bifMap.putValue("os", new ErlangBifDescriptor("os", "set_signal", 2, "Signal, Option"));
     bifMap.remove("erts_internal", new ErlangBifDescriptor("erts_internal", "maps_to_list", 2, "M, N"));
+    // Since 20.1
     bifMap.remove("erlang", new ErlangBifDescriptor("erlang", "iolist_to_iovec", 1, "IOList"));
   }
 
