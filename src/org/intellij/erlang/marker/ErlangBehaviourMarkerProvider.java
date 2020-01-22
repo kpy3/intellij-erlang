@@ -30,6 +30,7 @@ import org.intellij.erlang.navigation.ErlangNavigationUtil;
 import org.intellij.erlang.psi.*;
 import org.intellij.erlang.psi.impl.ErlangPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
 import java.util.Collection;
@@ -37,35 +38,44 @@ import java.util.List;
 
 public class ErlangBehaviourMarkerProvider implements LineMarkerProvider {
   @Override
-  public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
+  public LineMarkerInfo<?> getLineMarkerInfo(@NotNull PsiElement element) {
     return null;
   }
 
   @Override
   public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
     for (PsiElement element : elements) {
-      if (!(element instanceof LeafPsiElement)) continue;
-      PsiElement atom = element.getParent();
-      if (!(atom instanceof ErlangAtom)) continue;
-      PsiElement parent = atom.getParent();
-      if (!(parent instanceof ErlangQAtom)) continue;
-      PsiElement clause = parent.getParent();
-      if (!(clause instanceof ErlangFunctionClause)) continue;
-      PsiElement function = clause.getParent();
-      if (function instanceof ErlangFunction && ContainerUtil.getFirstItem(((ErlangFunction) function).getFunctionClauseList()) == clause) {
-        List<ErlangCallbackSpec> prototypes = ErlangNavigationUtil.getCallbackSpecs((ErlangFunction) function);
+      ErlangFunction function = findFunctionFromNameLeaf(element);
+      if (function != null) {
+        List<ErlangCallbackSpec> prototypes = ErlangNavigationUtil.getCallbackSpecs(function);
         if (!prototypes.isEmpty()) {
-          result.add(createImplementationMarker(element, (ErlangFunction) function, prototypes));
+          result.add(createImplementationMarker(element, function, prototypes));
         }
       }
     }
   }
+  
+  @Nullable
+  public static ErlangFunction findFunctionFromNameLeaf(@Nullable PsiElement element) {
+    if (!(element instanceof LeafPsiElement)) return null;
+    PsiElement atom = element.getParent();
+    if (!(atom instanceof ErlangAtom)) return null;
+    PsiElement parent = atom.getParent();
+    if (!(parent instanceof ErlangQAtom)) return null;
+    PsiElement clause = parent.getParent();
+    if (!(clause instanceof ErlangFunctionClause)) return null;
+    PsiElement function = clause.getParent();
 
-  private static LineMarkerInfo createImplementationMarker(PsiElement atom,
-                                                           ErlangFunction function,
-                                                           Collection<ErlangCallbackSpec> callbackSpecs) {
+    if (function instanceof ErlangFunction && ContainerUtil.getFirstItem(((ErlangFunction) function).getFunctionClauseList()) == clause) {
+      return (ErlangFunction) function;
+    }
+    return null;
+  }
+
+  private static LineMarkerInfo<PsiElement> createImplementationMarker(@NotNull PsiElement atom,
+                                                                       @NotNull ErlangFunction function,
+                                                                       @NotNull Collection<ErlangCallbackSpec> callbackSpecs) {
     String presentation = ErlangPsiImplUtil.createFunctionPresentation(function);
-
     return new LineMarkerInfo<>(
       atom,
       atom.getTextRange(),

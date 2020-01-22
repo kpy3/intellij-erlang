@@ -37,6 +37,7 @@ import com.intellij.util.SystemProperties;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.graph.DFSTBuilder;
 import com.intellij.util.graph.GraphGenerator;
+import com.intellij.util.graph.InboundSemiGraph;
 import com.intellij.util.xmlb.SkipDefaultValuesSerializationFilters;
 import com.intellij.util.xmlb.XmlSerializationException;
 import com.intellij.util.xmlb.XmlSerializer;
@@ -143,7 +144,7 @@ public class ErlangPrepareDependenciesCompileTask implements CompileTask {
   @NotNull
   private static List<ErlangFileDescriptor> getTopologicallySortedFileDescriptors(@NotNull Module... modulesToCompile) throws CyclicDependencyFoundException {
     final ErlangFilesDependencyGraph semiGraph = ErlangFilesDependencyGraph.createSemiGraph(modulesToCompile);
-    DFSTBuilder<String> builder = new DFSTBuilder<>(GraphGenerator.create(semiGraph));
+    DFSTBuilder<String> builder = new DFSTBuilder<>(GraphGenerator.generate(semiGraph));
     if (!builder.isAcyclic()) {
       throw new CyclicDependencyFoundException(builder.getCircularDependency());
     }
@@ -156,7 +157,7 @@ public class ErlangPrepareDependenciesCompileTask implements CompileTask {
     return ErlangBuilderUtil.getPath(ioFile);
   }
 
-  private static class ErlangFilesDependencyGraph implements GraphGenerator.SemiGraph<String> {
+  private static class ErlangFilesDependencyGraph implements InboundSemiGraph<String> {
     private final Project myProject;
     private final PsiManager myPsiManager;
     private final Set<String> myHeaders;
@@ -179,7 +180,7 @@ public class ErlangPrepareDependenciesCompileTask implements CompileTask {
 
     @NotNull
     private static Set<String> collectHeaderPaths(@NotNull Module[] modulesToCompile) {
-      Set<String> erlangHeaders = ContainerUtil.newHashSet();
+      Set<String> erlangHeaders = new HashSet<>();
       for (Module module : modulesToCompile) {
         erlangHeaders.addAll(getHeaders(module, false));
         erlangHeaders.addAll(getHeaders(module, true));
@@ -192,12 +193,14 @@ public class ErlangPrepareDependenciesCompileTask implements CompileTask {
       return ContainerUtil.map(getErlangHeaderFiles(module, onlyTestModules), ErlangPrepareDependenciesCompileTask::getPath);
     }
 
+    @NotNull
     @Override
     public Collection<String> getNodes() {
       return myPathsToDependenciesMap.keySet();
     }
 
     @Override
+    @NotNull
     public Iterator<String> getIn(@NotNull String filePath) {
       return myPathsToDependenciesMap.get(filePath).iterator();
     }
@@ -219,11 +222,11 @@ public class ErlangPrepareDependenciesCompileTask implements CompileTask {
                                       @NotNull Collection<VirtualFile> erlangFiles,
                                       @NotNull List<String> globalParseTransforms) {
       for (VirtualFile file : erlangFiles) {
-        Set<String> dependencies = ContainerUtil.newHashSet();
+        Set<String> dependencies = new HashSet<>();
         ErlangFile psi = getErlangFile(file);
         addDeclaredDependencies(module, psi, dependencies);
         dependencies.addAll(globalParseTransforms);
-        myPathsToDependenciesMap.put(getPath(file), ContainerUtil.newArrayList(dependencies));
+        myPathsToDependenciesMap.put(getPath(file), new ArrayList<>(dependencies));
       }
     }
 
@@ -243,21 +246,21 @@ public class ErlangPrepareDependenciesCompileTask implements CompileTask {
 
     @NotNull
     private List<String> getDeclaredParseTransformPaths(@NotNull Module module, @NotNull ErlangFile erlangModule) {
-      Set<String> pt = ContainerUtil.newHashSet();
+      Set<String> pt = new HashSet<>();
       erlangModule.addDeclaredParseTransforms(pt);
       return resolvePathsFromNames(pt, module);
     }
 
     @NotNull
     private List<String> getDeclaredBehaviourPaths(@NotNull Module module, @NotNull ErlangFile erlangModule) {
-      Set<String> behaviours = ContainerUtil.newHashSet();
+      Set<String> behaviours = new HashSet<>();
       ErlangPsiImplUtil.addDeclaredBehaviourModuleNames(erlangModule, behaviours);
       return resolvePathsFromNames(behaviours, module);
     }
 
     @NotNull
     private List<String> resolvePathsFromNames(@NotNull Collection<String> erlangModuleNames, @NotNull Module module) {
-      List<String> paths = ContainerUtil.newArrayList();
+      List<String> paths = new ArrayList<>();
       for (String erlangModuleName : erlangModuleNames) {
         paths.addAll(getPathsFromModuleName(erlangModuleName, module));
       }

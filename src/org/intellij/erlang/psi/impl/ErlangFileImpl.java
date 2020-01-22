@@ -331,7 +331,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
   @Nullable
   @Override
   public ErlangFileStub getStub() {
-    StubElement stub = super.getStub();
+    StubElement<?> stub = super.getStub();
     return (ErlangFileStub) stub;
   }
 
@@ -371,7 +371,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
 
   @NotNull
   private Set<String> calcExportedSignatures() {
-    Set<String> result = ContainerUtil.newHashSet();
+    Set<String> result = new HashSet<>();
     for (ErlangAttribute attribute : getAttributes()) {
       ErlangExport export = attribute.getExport();
       ErlangExportFunctions exportFunctions = export != null ? export.getExportFunctions() : null;
@@ -389,7 +389,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
 
   @NotNull
   private List<ErlangExpression> getCompileDirectiveExpressions() {
-    List<ErlangExpression> result = ContainerUtil.newArrayList();
+    List<ErlangExpression> result = new ArrayList<>();
     for (ErlangAttribute attribute : getAttributes()) {
       ErlangAtomAttribute atomAttribute = attribute.getAtomAttribute();
       if (atomAttribute != null && "compile".equals(atomAttribute.getName()) && atomAttribute.getAttrVal() != null) {
@@ -401,7 +401,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
 
   @NotNull
   private Set<String> calcNoAutoImportSignatures() {
-    Set<String> result = ContainerUtil.newHashSet();
+    Set<String> result = new HashSet<>();
     for (ErlangExpression expression : getCompileDirectiveExpressions()) {
       if (expression instanceof ErlangListExpression) {
         for (ErlangExpression tuple : ((ErlangListExpression) expression).getExpressionList()) {
@@ -419,7 +419,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
 
   @NotNull
   private static Set<String> getNoAutoImportFunctionSignaturesFromTuple(@Nullable ErlangTupleExpression tupleExpression) {
-    final Set<String> result = ContainerUtil.newHashSet();
+    final Set<String> result = new HashSet<>();
     if (tupleExpression == null || tupleExpression.getExpressionList().size() != 2) return result;
     ErlangExpression first = ContainerUtil.getFirstItem(tupleExpression.getExpressionList());
     ErlangExpression second = ContainerUtil.getLastItem(tupleExpression.getExpressionList());
@@ -522,7 +522,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
     ErlangFileStub stub = getStub();
     if (stub != null) {
       Map<String, ErlangCallbackSpec> callbacksMap = new LinkedHashMap<>();
-      for (StubElement child : stub.getChildrenStubs()) {
+      for (StubElement<?> child : stub.getChildrenStubs()) {
         if (child instanceof ErlangCallbackSpecStub) {
           String name = ((ErlangCallbackSpecStub) child).getName();
           int arity = ((ErlangCallbackSpecStub) child).getArity();
@@ -685,7 +685,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
                                ErlangCallbackFunctionStubElementType.ARRAY_FACTORY);
     }
 
-    List<ErlangCallbackFunction> optionalCallbacks = ContainerUtil.newArrayList();
+    List<ErlangCallbackFunction> optionalCallbacks = new ArrayList<>();
     for (ErlangAttribute attr : getAttributes()) {
       ErlangOptionalCallbacks callbacks = attr.getOptionalCallbacks();
       ErlangOptionalCallbackFunctions opts = callbacks != null ? callbacks.getOptionalCallbackFunctions() : null;
@@ -733,7 +733,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
       ErlangImportDirective importDirective = attribute.getImportDirective();
       ErlangImportFunctions importFunctions = importDirective != null ? importDirective.getImportFunctions() : null;
       List<ErlangImportFunction> functions = importFunctions != null ? importFunctions.getImportFunctionList() : null;
-      ContainerUtil.addAll(result, ContainerUtil.notNullize(functions));
+      result.addAll(ContainerUtil.notNullize(functions));
     }
     return result;
   }
@@ -799,7 +799,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
 
   @NotNull
   private <T extends PsiElement> List<T> collectChildrenDummyAware(@NotNull final Class<T> clazz) {
-    final List<T> result = ContainerUtil.newArrayList();
+    final List<T> result = new ArrayList<>();
     processChildrenDummyAware(this, element -> {
       if (clazz.isInstance(element)) {
         //noinspection unchecked
@@ -829,7 +829,7 @@ public class ErlangFileImpl extends PsiFileBase implements ErlangFile, PsiNameId
   private static <E extends StubBasedPsiElement<?>> List<E> getChildrenByType(@NotNull ErlangFileStub stub,
                                                                               @NotNull IElementType elementType,
                                                                               @NotNull ArrayFactory<E> arrayFactory) {
-    return ContainerUtil.list(stub.getChildrenByType(elementType, arrayFactory));
+    return Arrays.asList(stub.getChildrenByType(elementType, arrayFactory));
   }
 
   private abstract class ValueProvider<T> implements CachedValueProvider<T> {

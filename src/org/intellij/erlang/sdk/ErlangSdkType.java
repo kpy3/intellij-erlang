@@ -49,6 +49,7 @@ import org.jetbrains.annotations.TestOnly;
 
 import javax.swing.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
@@ -216,45 +217,62 @@ public class ErlangSdkType extends SdkType {
 
   @Nullable
   private ErlangSdkRelease detectSdkVersion(@NotNull String sdkHome) {
-    ErlangSdkRelease cachedRelease = mySdkHomeToReleaseCache.get(getVersionCacheKey(sdkHome));
-    if (cachedRelease != null) {
-      return ensureReleaseDetected(cachedRelease);
-    }
-
-    File erl = JpsErlangSdkType.getByteCodeInterpreterExecutable(sdkHome);
-    if (!erl.canExecute()) {
-      String reason = erl.getPath() + (erl.exists() ? " is not executable." : " is missing.");
-      LOG.warn("Can't detect Erlang version: " + reason);
-      return ensureReleaseDetected(null);
-    }
-
-    try {
-      ProcessOutput output = ErlangSystemUtil.getProcessOutput(sdkHome, erl.getAbsolutePath(), "-noshell",
-        "-eval", PRINT_VERSION_INFO_EXPRESSION);
-      ErlangSdkRelease release = output.getExitCode() != 0 || output.isCancelled() || output.isTimeout() ? null :
-        parseSdkVersion(output.getStdoutLines());
-      if (release != null) {
-        mySdkHomeToReleaseCache.put(getVersionCacheKey(sdkHome), release);
-      }
-      else {
-        LOG.warn("Failed to detect Erlang version.\n" +
-          "StdOut: " + output.getStdout() + "\n" +
-          "StdErr: " + output.getStderr());
-      }
-      return ensureReleaseDetected(release);
-    } catch (ExecutionException e) {
-      LOG.warn(e);
-    }
-
-    return ensureReleaseDetected(null);
-  }
-
-  @Nullable
-  private static ErlangSdkRelease ensureReleaseDetected(@Nullable ErlangSdkRelease release) {
-    if (ApplicationManager.getApplication().isUnitTestMode() && release == null) {
+    ErlangSdkRelease release = mySdkHomeToReleaseCache.computeIfAbsent(getVersionCacheKey(sdkHome), ErlangSdkType::getRelease);
+    if (release == null && ApplicationManager.getApplication().isUnitTestMode()) {
       throw new AssertionError("SDK version detection failed. If you're using a mock SDK, make sure you have your SDK version pre-cached");
     }
     return release;
+  }
+
+  @Nullable
+  private static ErlangSdkRelease getRelease(@NotNull String sdkHome) {
+    ErlangSdkRelease withFiles = detectReleaseWithFiles(sdkHome);
+    if (withFiles != null) return withFiles;
+    return detectReleaseWithProcess(sdkHome);
+  }
+
+  @Nullable
+  private static ErlangSdkRelease detectReleaseWithFiles(@NotNull String sdkHome) {
+    try {
+      File startErl = new File(sdkHome, "releases/start_erl.data");
+      String line = ContainerUtil.getFirstItem(FileUtil.loadLines(startErl));
+      List<String> split = StringUtil.split(line, " ");
+      if (split.size() == 2) {
+        return new ErlangSdkRelease(split.get(1), split.get(0));
+      }
+    }
+    catch (IOException ignore) {
+    }
+    return null;
+  }
+
+  @Nullable
+  private static ErlangSdkRelease detectReleaseWithProcess(@NotNull String sdkHome) {
+    try {
+      File erl = JpsErlangSdkType.getByteCodeInterpreterExecutable(sdkHome);
+      if (!erl.canExecute()) {
+        String reason = erl.getPath() + (erl.exists() ? " is not executable." : " is missing.");
+        LOG.warn("Can't detect Erlang version: " + reason);
+        return null;
+      }
+
+      ProcessOutput output = ErlangSystemUtil.getProcessOutput(sdkHome, erl.getAbsolutePath(), "-noshell",
+                                                               "-eval", PRINT_VERSION_INFO_EXPRESSION);
+      ErlangSdkRelease release = output.getExitCode() != 0 || output.isCancelled() || output.isTimeout()
+                                 ? null
+                                 : parseSdkVersion(output.getStdoutLines());
+
+      if (release == null) {
+        LOG.warn("Failed to detect Erlang version.\n" +
+                 "StdOut: " + output.getStdout() + "\n" +
+                 "StdErr: " + output.getStderr());
+      }
+      return release;
+    }
+    catch (ExecutionException e) {
+      LOG.warn(e);
+      return null;
+    }
   }
 
   @Nullable

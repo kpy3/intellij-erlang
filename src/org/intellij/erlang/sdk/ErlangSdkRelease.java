@@ -66,7 +66,7 @@ public final class ErlangSdkRelease {
 
   @Override
   public String toString() {
-    return "Erlang/OTP " + getOtpRelease() + " [erts-" + getErtsVersion() + "]";
+    return "OTP " + getOtpRelease() + ", erts-" + getErtsVersion();
   }
 
   @Nullable

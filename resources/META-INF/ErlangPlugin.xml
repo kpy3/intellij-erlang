@@ -30,12 +30,20 @@
         <internalFileTemplate name="Erlang Module"/>
         <internalFileTemplate name="Erlang Header"/>
         <internalFileTemplate name="Erlang EUnit Tests"/>
+
         <internalFileTemplate name="Erlang Application"/>
+        <internalFileTemplate name="Erlang Application Minimal"/>
         <internalFileTemplate name="Erlang Application Resource File"/>
+
         <internalFileTemplate name="Erlang Supervisor"/>
+        <internalFileTemplate name="Erlang Supervisor Minimal"/>
+
         <internalFileTemplate name="Erlang Gen Server"/>
+        <internalFileTemplate name="Erlang Gen Server Minimal"/>
+
         <internalFileTemplate name="Erlang Gen Statem"/>
         <internalFileTemplate name="Erlang Gen FSM"/>
+        <internalFileTemplate name="Erlang Gen FSM Minimal"/>
         <internalFileTemplate name="Erlang Gen Event"/>
 
         <defaultLiveTemplatesProvider implementation="org.intellij.erlang.template.ErlangLiveTemplateProvider"/>
@@ -103,6 +111,7 @@
         <programRunner implementation="org.intellij.erlang.runconfig.ErlangRunner"/>
         <configurationType implementation="org.intellij.erlang.application.ErlangApplicationRunConfigurationType"/>
         <runConfigurationProducer implementation="org.intellij.erlang.application.ErlangApplicationRunConfigurationProducer"/>
+        <runLineMarkerContributor language="Erlang" implementationClass="org.intellij.erlang.runconfig.ErlangRunLineMarkerContributor"/>
 
         <!-- debug -->
         <programRunner implementation="org.intellij.erlang.debugger.xdebug.ErlangDebugRunner"/>
@@ -126,6 +135,8 @@
         <codeInsight.lineMarkerProvider language="Erlang" implementationClass="org.intellij.erlang.marker.ErlangBehaviourMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="Erlang" implementationClass="org.intellij.erlang.marker.ErlangMethodSeparatorProvider"/>
 
+        <breadcrumbsInfoProvider implementation="org.intellij.erlang.ErlangBreadcrumbsProvider"/>
+
         <codeInsight.parameterInfo language="Erlang" implementationClass="org.intellij.erlang.ErlangParameterInfoHandler"/>
         <codeInsight.gotoSuper language="Erlang" implementationClass="org.intellij.erlang.navigation.ErlangGotoSuperHandler"/>
 
@@ -146,7 +157,7 @@
 
         <editorNotificationProvider implementation="org.intellij.erlang.inspection.SetupSDKNotificationProvider"/>
 
-        <copyright.updater filetype="Erlang" implementationClass="org.intellij.erlang.copyright.UpdateErlangCopyrightsProvider"/>
+        <callHierarchyProvider language="Erlang" implementationClass="org.intellij.erlang.hierarchy.ErlangCallHierarchyProvider"/>
 
         <!--errors-->
         <localInspection language="Erlang" shortName="ErlangUnboundVariable" displayName="Unbound variable"
@@ -164,7 +175,7 @@
         <localInspection language="Erlang" shortName="ErlangIncorrectModuleName" displayName="Incorrect module name"
                          groupName="Erlang" enabledByDefault="true" level="ERROR"
                          implementationClass="org.intellij.erlang.inspection.ErlangIncorrectModuleNameInspection"/>
-        <localInspection language="Erlang" shortName="ErlangIllegalPattern" displayName="Illegal Pattern"
+        <localInspection language="Erlang" shortName="ErlangIllegalPattern" displayName="Illegal pattern"
                          groupName="Erlang" enabledByDefault="true" level="ERROR"
                          implementationClass="org.intellij.erlang.inspection.ErlangIllegalPatternInspection"/>
         <localInspection language="Erlang" shortName="ErlangIllegalGuard" displayName="Illegal guard"
@@ -271,7 +282,7 @@
             <add-to-group group-id="NewGroup" anchor="before" relative-to-action="NewFile"/>
         </action>
         <action id="org.intellij.erlang.actions.ErlangEmacsFormatAction"
-                class="org.intellij.erlang.actions.ErlangEmacsFormatAction" text="Reformat code with Emacs"
+                class="org.intellij.erlang.actions.ErlangEmacsFormatAction" text="Reformat Code with Emacs"
                 description="Format current file with external Emacs formatter">
             <add-to-group group-id="CodeFormatGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl alt E"/>

@@ -20,6 +20,7 @@ import com.intellij.openapi.util.Conditions;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.graph.Graph;
 import com.intellij.util.graph.GraphGenerator;
+import com.intellij.util.graph.InboundSemiGraph;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.jps.builders.BuildOutputConsumer;
@@ -112,8 +113,8 @@ public class ErlangModuleBuildOrderBuilder extends TargetBuilder<ErlangSourceRoo
   @NotNull
   private static Set<String> getAllDirtyFiles(@NotNull ErlangProjectBuildOrder projectBuildOrder,
                                               @NotNull List<String> dirtyFiles) {
-    Graph<String> dependencies = GraphGenerator.create(new SortedModuleDependencyGraph(projectBuildOrder));
-    Set<String> allDirtyFiles = ContainerUtil.newHashSet();
+    Graph<String> dependencies = GraphGenerator.generate(new SortedModuleDependencyGraph(projectBuildOrder));
+    Set<String> allDirtyFiles = new HashSet<>();
     for (String dirtyFile : dirtyFiles) {
       collectDirtyFiles(dirtyFile, dependencies, allDirtyFiles);
     }
@@ -170,8 +171,8 @@ public class ErlangModuleBuildOrderBuilder extends TargetBuilder<ErlangSourceRoo
     }
   }
 
-  private static class SortedModuleDependencyGraph implements GraphGenerator.SemiGraph<String> {
-    private final LinkedHashMap<String, List<String>> myPathsToDependenciesMap = ContainerUtil.newLinkedHashMap();
+  private static class SortedModuleDependencyGraph implements InboundSemiGraph<String> {
+    private final LinkedHashMap<String, List<String>> myPathsToDependenciesMap = new LinkedHashMap<>();
 
     public SortedModuleDependencyGraph(@NotNull ErlangProjectBuildOrder projectBuildOrder) {
       for (ErlangFileDescriptor node : projectBuildOrder.myErlangFiles) {
@@ -179,12 +180,14 @@ public class ErlangModuleBuildOrderBuilder extends TargetBuilder<ErlangSourceRoo
       }
     }
 
+    @NotNull
     @Override
     public Collection<String> getNodes() {
       return myPathsToDependenciesMap.keySet();
     }
 
     @Override
+    @NotNull
     public Iterator<String> getIn(String node) {
       return myPathsToDependenciesMap.get(node).iterator();
     }

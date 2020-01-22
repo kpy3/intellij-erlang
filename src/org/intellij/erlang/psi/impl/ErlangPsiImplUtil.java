@@ -443,9 +443,9 @@ public class ErlangPsiImplUtil {
   }
 
   @NotNull
-  private static PsiReference getModuleReference(ErlangCompositeElement o, @NotNull ErlangQAtom atom) {
+  private static PsiReference getModuleReference(@NotNull ErlangCompositeElement o, @NotNull ErlangQAtom atom) {
     ErlangModuleRef moduleRef = PsiTreeUtil.getPrevSiblingOfType(o, ErlangModuleRef.class);
-    return new ErlangTypeReferenceImpl(atom, moduleRef);
+    return new ErlangTypeReferenceImpl(o, atom, moduleRef);
   }
 
   @NotNull
@@ -508,6 +508,19 @@ public class ErlangPsiImplUtil {
 
   public static boolean inColonQualified(PsiElement psiElement) {
     return PsiTreeUtil.getParentOfType(psiElement, ErlangColonQualifiedExpression.class) != null;
+  }
+
+  /**
+   * Check whether expression is used in a binary expression after the colon, like <<_:Var>>
+   */
+  public static boolean isBinaryWidthExpression(PsiElement psiElement) {
+    ErlangMaxExpression maxParent = PsiTreeUtil.getParentOfType(psiElement, ErlangMaxExpression.class);
+    if (maxParent == null) return false;
+
+    PsiElement prevSib = PsiTreeUtil.getPrevSiblingOfType(maxParent, PsiElement.class);
+    if (prevSib == null) return false;
+
+    return prevSib.textMatches(":");
   }
 
   public static boolean inLeftPartOfAssignment(@NotNull PsiElement psiElement) {
@@ -1078,7 +1091,7 @@ public class ErlangPsiImplUtil {
       VirtualFile appDir = ErlangApplicationIndex.getApplicationDirectoryByName(libName, GlobalSearchScope.allScope(project));
       ErlangFile includedFile = getRelativeErlangFile(project, relativePath, appDir);
       if (includedFile != null) {
-        return ContainerUtil.newSmartList(includedFile);
+        return new SmartList<>(includedFile);
       }
     }
     //either include_lib does not specify a library, or it was not found, falling back to 'include' behaviour.
@@ -1100,14 +1113,14 @@ public class ErlangPsiImplUtil {
     String relativePath = StringUtil.unquoteString(includeString.getText());
     Project project = erlangFile.getProject();
     ErlangFile relativeToDirectParent = getRelativeErlangFile(project, relativePath, parent);
-    if (relativeToDirectParent != null) return ContainerUtil.newSmartList(relativeToDirectParent);
+    if (relativeToDirectParent != null) return new SmartList<>(relativeToDirectParent);
     //relative to direct parent include file was not found
     //let's search in include directories
     if (containingVirtualFile != null) {
       Module module = ModuleUtilCore.findModuleForFile(containingVirtualFile, project);
       for (VirtualFile includeDir : ErlangIncludeDirectoryUtil.getIncludeDirectories(module)) {
         ErlangFile includedFile = getRelativeErlangFile(project, relativePath, includeDir);
-        if (includedFile != null) return ContainerUtil.newSmartList(includedFile);
+        if (includedFile != null) return new SmartList<>(includedFile);
       }
     }
     //TODO consider providing source roots functionality to small IDEs
@@ -1123,14 +1136,14 @@ public class ErlangPsiImplUtil {
     if (otpAppRoot == null) return ContainerUtil.emptyList();
     VirtualFile otpIncludeDirectory = otpAppRoot.findChild("include");
     ErlangFile relativeToOtpIncludeDirectory = getRelativeErlangFile(project, includeStringPath, otpIncludeDirectory);
-    if (relativeToOtpIncludeDirectory != null) return ContainerUtil.newSmartList(relativeToOtpIncludeDirectory);
+    if (relativeToOtpIncludeDirectory != null) return new SmartList<>(relativeToOtpIncludeDirectory);
     //we haven't found it in 'include' directory, let's try include paths listed in rebar.config
     ErlangFile rebarConfigPsi = RebarConfigUtil.getRebarConfig(project, otpAppRoot);
     if (rebarConfigPsi != null) {
       for(String includePath : ContainerUtil.reverse(RebarConfigUtil.getIncludePaths(rebarConfigPsi))) {
         VirtualFile includePathVirtualFile = VfsUtilCore.findRelativeFile(includePath, otpAppRoot);
         ErlangFile includedFile = getRelativeErlangFile(project, includeStringPath, includePathVirtualFile);
-        if (includedFile != null) return ContainerUtil.newSmartList(includedFile);
+        if (includedFile != null) return new SmartList<>(includedFile);
       }
     }
     return ContainerUtil.emptyList();
